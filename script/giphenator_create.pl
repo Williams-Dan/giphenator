@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Catalyst::ScriptRunner;
-Catalyst::ScriptRunner->run('Giphenator', 'Create');
+Catalyst::ScriptRunner->run( 'Giphenator', 'Create' );
 
 1;
 

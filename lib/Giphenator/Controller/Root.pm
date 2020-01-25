@@ -8,7 +8,7 @@ BEGIN { extends 'Catalyst::Controller' }
 # Sets the actions in this controller to be registered with no prefix
 # so they function identically to actions created in MyApp.pm
 #
-__PACKAGE__->config(namespace => '');
+__PACKAGE__->config( namespace => '' );
 
 =encoding utf-8
 
@@ -28,11 +28,31 @@ The root page (/)
 
 =cut
 
-sub index :Path :Args(0) {
-    my ( $self, $c ) = @_;
+sub index : Path : Args(0) Consumes(JSON) {
+	my ( $self, $c ) = @_;
 
-    # Hello World
-    $c->response->body( $c->welcome_message );
+	#cargo culting like a boss
+	my $req = ( my $c = pop )->req->body_data;
+	if ( $req->{searchstring} ) {
+
+		# TODO giphy things
+		$c->stash->{pass} = 'found';
+
+		# TODO catch user
+		# TODO Associate last gif with user
+		$c->stash->{msg} = {
+			img  => 'https://media1.giphy.com/media/MAFTqETY2itA4/giphy.gif?cid=790b7611929cdb1d959c5c1b4fc60528d7f3cbd9c04157d3&rid=giphy.gif',
+			tags => '#dancing with myself'
+		};
+	} elsif ( $req->{gifresponses} ) {
+
+		# get last gif from user
+		# add/ act on gif responses (save, medal, etc)
+	} else {
+		$c->stash->{fail} = 'Invalid Action';
+	}
+
+	$c->forward( 'View::JSON' );
 }
 
 =head2 default
@@ -41,10 +61,13 @@ Standard 404 error page
 
 =cut
 
-sub default :Path {
-    my ( $self, $c ) = @_;
-    $c->response->body( 'Page not found' );
-    $c->response->status(404);
+sub default : Path {
+	my ( $self, $c ) = @_;
+
+	# TODO $c->failmsg ?
+	$c->stash->{fail} = 1;
+	$c->stash->{msg}  = 'Not found';
+	$c->forward( 'View::JSON' );
 }
 
 =head2 end
@@ -53,7 +76,7 @@ Attempt to render a view, if needed.
 
 =cut
 
-sub end : ActionClass('RenderView') {}
+sub end : ActionClass('RenderView') { }
 
 =head1 AUTHOR
 

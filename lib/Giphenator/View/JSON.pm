@@ -1,8 +1,5 @@
 package Giphenator::View::JSON;
-use Moose;
-use namespace::autoclean;
-
-extends 'Catalyst::View';
+use base qw( Catalyst::View::JSON );
 
 =head1 NAME
 
@@ -26,6 +23,6 @@ it under the same terms as Perl itself.
 
 =cut
 
-__PACKAGE__->meta->make_immutable;
+__PACKAGE__->meta->make_immutable( inline_constructor => 0 );
 
 1;

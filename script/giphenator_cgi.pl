@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 use Catalyst::ScriptRunner;
-Catalyst::ScriptRunner->run('Giphenator', 'CGI');
+Catalyst::ScriptRunner->run( 'Giphenator', 'CGI' );
 
 1;
 
