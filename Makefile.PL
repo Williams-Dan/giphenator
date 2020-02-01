@@ -13,11 +13,17 @@ requires 'Catalyst::Runtime' => '5.90126';
 requires 'Catalyst::Plugin::ConfigLoader';
 requires 'Catalyst::Plugin::Static::Simple';
 requires 'Catalyst::Action::RenderView';
+requires 'Catalyst::Helper::Model::DBIC::Schema';
+requires 'DBIx::Class::Schema::Loader';
+requires 'DBIx::Class::TimeStamp';
+requires 'Catalyst::View::JSON';
+requires 'MooseX::NonMoose' => '~0.25';
 requires 'Moose';
 requires 'namespace::autoclean';
 requires 'Config::General';    # This should reflect the config file format you've chosen
                                # See Catalyst::Plugin::ConfigLoader for supported formats
 test_requires 'Test::More' => '0.88';
+test_requires 'Test::WWW::Mechanize::Catalyst';
 catalyst;
 
 install_script glob( 'script/*.pl' );

@@ -3,28 +3,36 @@
 use strict;
 use warnings;
 use Test::More;
+use Giphenator::Schema::Result::LastSearched;
 
 use Catalyst::Test 'Giphenator';
 
 BEGIN{
-    use_ok(Test::WWW::Mechanize::Catalyst => Giphenator);
+    use_ok('Test::WWW::Mechanize::Catalyst' => 'Giphenator');
     $ENV{ MYAPP_CONFIG_LOCAL_SUFFIX } = 'test';
 };
 
-my $user = Test::WWW::Mechanize::Catalyst->new;
+my $user = Test::WWW::Mechanize::Catalyst->new();
+my $last_searched_result_set = Giphenator::Schema::Result::LastSearched->new();
+my $gif_result_set = Giphenator::Schema::Result::Gif->new();
 
 subtest '# Root request / returns success' => sub {
     $user->get_ok('/', 'Request should succeed');
 };
 
 subtest '# Save last /savelast saves the last retrived gif from the user' => sub {
-    # Add record into last searched
+
+    $last_searched_result_set->insert({user_id => 1, url => 'https://media.giphy.com/media/bMoMuUUUbff2g/giphy.gif'});
 
     $user->get_ok('/savelast', 'Request should succeed');
 
-    # Assert record no longer in last searched
-    # Assert record now in table
-}
+    ok(!$last_searched_result_set->first(), 'There should be no last searched left in the table');
+    
+    my $gif = $gif_result_set->first();
+    ok($gif, 'A gif is returned form the database');
+    ok($gif->{user_id} == 1, 'The returned gif should be related to the user that saved it');
+    ok($gif->{url} eq 'https://media.giphy.com/media/bMoMuUUUbff2g/giphy.gif', 'The saved gif should have the correct giphy url');
+};
 
 subtest '# Save last /savelast returns message where no last searched image exists' => sub {
 
@@ -32,7 +40,7 @@ subtest '# Save last /savelast returns message where no last searched image exis
 
     is($user->ct, 'application/json', 'Check content type is json');
     $user->content_contains('There is no previous search history, please search for a gif before trying to save one');
-}
+};
 
 done_testing();
 
