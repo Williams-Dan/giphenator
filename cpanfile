@@ -17,3 +17,4 @@ requires 'Config::General';
 
 requires 'Test::More', '0.88';
 requires 'Test::WWW::Mechanize::Catalyst';
+requires 'DBICx::TestDatabase';

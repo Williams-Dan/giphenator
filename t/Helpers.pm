@@ -1,4 +1,4 @@
-package t::Helpers;
+package Helpers;
 
 use strict;
 use warnings;
@@ -6,7 +6,6 @@ use warnings;
 use DBICx::TestDatabase;
 use Giphenator();
 use Test::WWW::Mechanize::Catalyst 'Giphenator';
-use File::Touch;
 
 sub setup_database {
 

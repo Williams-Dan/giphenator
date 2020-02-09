@@ -9,13 +9,13 @@ use lib './t';
 
 use Giphenator::Schema::Result::LastSearched;
 use Catalyst::Test 'Giphenator';
-use t::Helpers;
+use Helpers;
 
 BEGIN{
     use_ok('Test::WWW::Mechanize::Catalyst' => 'Giphenator');
 };
 
-t::Helpers->setup_database();
+Helpers->setup_database();
 
 my $user = Test::WWW::Mechanize::Catalyst->new();
 my $last_searched_result_set = Giphenator::Schema::Result::LastSearched->new();
