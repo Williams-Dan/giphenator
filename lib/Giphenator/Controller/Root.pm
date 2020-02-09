@@ -55,6 +55,36 @@ sub index : Path : Args(0) Consumes(JSON) {
 	$c->forward( 'View::JSON' );
 }
 
+=head2 save_last
+
+Our endpoint for saving the last gif returned for a user
+
+=cut
+
+sub save_last : Path : Args(0) Consumes(JSON) {
+	my ( $self, $c ) = @_;
+
+	#TODO: Get user id once users are implemented
+	my $user_id = 1;	
+
+	my $last_searched = $c->model('DB::LastSearched')->by_user_id($user_id);
+
+	if($last_searched){
+		my $gif = $c->model('DB::Gif')->create({
+			url => $last_searched->{url},
+			user_id => $user_id
+		});
+
+		$last_searched->delete;
+
+		$c->response->status(204);
+
+	}else{
+		$c->stash->{msg} = 'There is no previous search history, please search for a gif before trying to save one';
+		$c->response->status(400);
+	}
+}
+
 =head2 default
 
 Standard 404 error page
